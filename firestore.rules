@@ -15,5 +15,11 @@ service cloud.firestore {
     match /communityPosts/{postId} {
       allow read, write: if true;
     }
+    match /attendanceRecords/{recordId} {
+      allow read, write: if true;
+    }
+    match /studentAttendanceProfiles/{profileId} {
+      allow read, write: if true;
+    }
   }
 }

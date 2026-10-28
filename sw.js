@@ -1,4 +1,4 @@
-const CACHE = "lnjpit-connect-v10";
+const CACHE = "lnjpit-connect-v13";
 const SHELL = [
   "./",
   "./index.html",

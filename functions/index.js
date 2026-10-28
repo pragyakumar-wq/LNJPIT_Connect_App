@@ -381,3 +381,44 @@ exports.listLostFoundItems = onCall({region: REGION, cors: true}, async () => {
   const items = snap.docs.map(d => ({id: d.id, ...d.data()}));
   return {items};
 });
+
+
+exports.saveAttendanceRecord = onCall({region: REGION, cors: true}, async request => {
+  const {record = {}, studentKey = "abhi"} = request.data || {};
+  if (typeof record.id !== "string" || !record.id.trim()) {
+    throw new HttpsError("invalid-argument", "Attendance record id is required.");
+  }
+  const cleanKey = String(studentKey || "abhi").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").slice(0, 48) || "abhi";
+  const docId = `${cleanKey}__${record.id.trim().replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 80)}`;
+  const payload = {
+    id: record.id.trim(),
+    docId,
+    studentKey: cleanKey,
+    studentName: String(record.studentName || cleanKey).trim().slice(0, 60),
+    date: String(record.date || "").slice(0, 20),
+    subject: String(record.subject || "").trim().slice(0, 120),
+    slot: String(record.slot || "").slice(0, 40),
+    status: ["Present", "Absent", "Cancelled"].includes(record.status) ? record.status : "Present",
+    createdAtMs: Number(record.createdAtMs || Date.now()),
+    updatedAtMs: Date.now(),
+    updatedAt: FieldValue.serverTimestamp()
+  };
+  await db.collection("attendanceRecords").doc(docId).set(payload, {merge: true});
+  return {saved: true, id: payload.id, docId};
+});
+
+exports.deleteAttendanceRecord = onCall({region: REGION, cors: true}, async request => {
+  const {id, docId, studentKey = "abhi"} = request.data || {};
+  const cleanKey = String(studentKey || "abhi").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").slice(0, 48) || "abhi";
+  const targetDocId = docId || `${cleanKey}__${String(id || "").trim().replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+  await db.collection("attendanceRecords").doc(targetDocId).delete();
+  return {deleted: true, id};
+});
+
+exports.listAttendanceRecords = onCall({region: REGION, cors: true}, async request => {
+  const {studentKey = "abhi"} = request.data || {};
+  const cleanKey = String(studentKey || "abhi").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").slice(0, 48) || "abhi";
+  const snap = await db.collection("attendanceRecords").where("studentKey", "==", cleanKey).limit(250).get();
+  const records = snap.docs.map(d => ({id: d.id, ...d.data()}));
+  return {records};
+});

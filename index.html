@@ -1445,6 +1445,24 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   background: #38bdf8;
   box-shadow: 0 0 8px #38bdf8;
 }
+
+.hero-live-clock-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(6, 22, 41, 0.78);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  backdrop-filter: blur(10px);
+  color: #7dd3fc;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
 .hero-right-cluster {
   display: flex;
   align-items: center;
@@ -1696,7 +1714,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .note-filter.active, .notice-filter.active { background: #1479ff; border-color: #1479ff; color: white; }
 .note-list { display: grid; gap: 7px; }
 .note-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; min-height: 55px; color: #edf6ff; text-decoration: none; border-radius: 12px; border: 1px solid rgba(88,153,205,.22); background: #0a2238; }
-.note-row[hidden] { display: none; }
+.note-row[hidden] { display: none !important; }
 .note-file { display: grid; place-items: center; flex: 0 0 34px; height: 34px; border-radius: 9px; font-size: 1.1rem; }
 .note-row > span:nth-child(2) { display: grid; gap: 2px; min-width: 0; }
 .note-row strong { font-size: .74rem; }
@@ -1798,6 +1816,7 @@ html[data-theme="light"] .attendance-section table { color: #12243a; }
 @media (min-width: 760px) {
   body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
   .home-welcome { max-width: 588px; margin: 0 auto; }
+  .card.live { max-width: 588px; margin: 14px auto 0; }
   .quick-card { min-height: 106px; }
   .overview-strip { grid-template-columns: repeat(3, 1fr); }
   .overview-item { align-items: flex-start; padding: 10px 6px; }
@@ -2874,6 +2893,7 @@ html[data-theme="light"] .fb-sync-banner pre {
         <div class="hero-top-row">
           <span class="hero-campus-pill"><span class="live-dot"></span>LNJPIT · CHAPRA CAMPUS</span>
           <div class="hero-right-cluster">
+            <span class="hero-live-clock-pill" id="heroLiveClock" title="Live IST Campus Time">🕒 --:--:--</span>
             <input type="file" id="heroPhotoInput" accept="image/*" hidden>
             <button type="button" class="hero-photo-btn" id="heroPhotoBtn" title="Set custom LNJPIT photo from gallery">📷 Set Photo</button>
             <button type="button" class="hero-photo-btn" id="heroPhotoResetBtn" title="Restore default LNJPIT campus photo" hidden>↺</button>
@@ -2924,6 +2944,47 @@ html[data-theme="light"] .fb-sync-banner pre {
       </div>
     </section>
 
+
+
+
+
+           <!-- Live Status Card -->
+
+    <section class="card live page-view is-active" id="homeLiveStatusCard" data-page="home" aria-live="polite">
+      <div class="lh">
+        <span class="live-badge"><span class="dot"></span>Live Status</span>
+        <span id="liveGroupBadge" style="font-size:0.75rem;opacity:0.8;font-weight:700;"></span>
+        <div class="clk-wrap">
+          <span class="clk" id="clk">--:--:--</span>
+        </div>
+      </div>
+      <div class="lg">
+        <div class="lc" id="nowCard">
+          <div>
+            <div class="lc-top">
+              <small>Happening Now</small>
+              <span class="countdown-pill" id="nowCd" hidden></span>
+            </div>
+            <strong id="nowT">–</strong>
+            <span id="nowS"></span>
+          </div>
+          <div class="progress-track" id="nowProgWrap" hidden>
+            <div class="progress-bar" id="nowProg"></div>
+          </div>
+        </div>
+        <div class="lc" id="nxtCard">
+          <div>
+            <div class="lc-top">
+              <small>Up Next</small>
+              <span class="countdown-pill" id="nxtCd" hidden></span>
+            </div>
+            <strong id="nxtT">–</strong>
+            <span id="nxtS"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- study section -->
 
     <section class="study-section page-view" id="studySection" data-page="notes">
@@ -2961,44 +3022,6 @@ html[data-theme="light"] .fb-sync-banner pre {
   </a>
 </section>
 
-
-
-           <!-- Live Status Card -->
-
-    <section class="card live page-view" data-page="home" aria-live="polite">
-      <div class="lh">
-        <span class="live-badge"><span class="dot"></span>Live Status</span>
-        <span id="liveGroupBadge" style="font-size:0.75rem;opacity:0.8;font-weight:700;"></span>
-        <div class="clk-wrap">
-          <span class="clk" id="clk">--:--:--</span>
-        </div>
-      </div>
-      <div class="lg">
-        <div class="lc" id="nowCard">
-          <div>
-            <div class="lc-top">
-              <small>Happening Now</small>
-              <span class="countdown-pill" id="nowCd" hidden></span>
-            </div>
-            <strong id="nowT">–</strong>
-            <span id="nowS"></span>
-          </div>
-          <div class="progress-track" id="nowProgWrap" hidden>
-            <div class="progress-bar" id="nowProg"></div>
-          </div>
-        </div>
-        <div class="lc" id="nxtCard">
-          <div>
-            <div class="lc-top">
-              <small>Up Next</small>
-              <span class="countdown-pill" id="nxtCd" hidden></span>
-            </div>
-            <strong id="nxtT">–</strong>
-            <span id="nxtS"></span>
-          </div>
-        </div>
-      </div>
-    </section>
 
 
 
@@ -3506,10 +3529,42 @@ service cloud.firestore {
     <!-- 📋 Attendance Tracker section -->
 
     <section class="attendance-section page-view" id="attendanceSection" data-page="profile">
-  <h2>📋 Attendance Tracker</h2>
-  <p class="att-subtitle">
-    LNJPIT Semester-I · Date-wise and lecture-wise attendance
-  </p>
+  <div class="lf-top-bar" style="margin-bottom:12px;flex-wrap:wrap;">
+    <div>
+      <h2 style="margin:0;">📋 Attendance Tracker</h2>
+      <p class="att-subtitle" style="margin:2px 0 0;">
+        LNJPIT Semester-I · Date-wise &amp; lecture-wise Firebase Cloud attendance
+      </p>
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+      <button type="button" class="lf-btn-sm alt" id="attCloudSyncNowBtn" data-fb-sync-now="1" style="min-height:28px;padding:4px 10px;font-size:0.7rem;">🔄 Sync Cloud</button>
+      <span class="lf-sync-pill" id="attSyncStatus" title="Tap for Firebase Cloud setup options">● Firebase Cloud Live</span>
+    </div>
+  </div>
+
+  <div class="fb-sync-banner" id="attFirebaseBanner" hidden>
+    <strong>☁️ Attendance Firebase Cloud Backup &amp; Multi-Device Sync</strong>
+    <span>Aapki attendance automatically Firebase Cloud (<code>attendanceRecords</code> &amp; <code>studentAttendanceProfiles</code>) par save hoti hai. Kisi doosre phone ya laptop par apni attendance wapas paane ke liye niche wahi <b>Student Name / Roll No</b> likhein:</span>
+    <pre id="attRulesCode">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</pre>
+    <div class="fb-sync-actions">
+      <button type="button" class="lf-btn-sm lf-btn-resolve" data-copy-fb-rules="1">📋 1. Copy Firestore Rules</button>
+      <a class="lf-btn-sm lf-btn-contact" href="https://console.firebase.google.com/project/lnjpit-timetable/firestore/rules" target="_blank" rel="noopener">🔗 2. Open Firebase Rules</a>
+      <button type="button" class="lf-btn-sm alt" data-fb-sync-now="1">🔄 Sync Attendance Now</button>
+    </div>
+  </div>
+
+  <div class="comm-identity-bar" style="margin-bottom:14px;border-color:rgba(59,130,246,0.4);">
+    <label for="attStudentSyncInput" style="color:#93c5fd;">☁️ Student Sync ID (Name / Roll No):</label>
+    <input type="text" id="attStudentSyncInput" placeholder="e.g. Abhi or Roll No 24CSE01" maxlength="45">
+    <button type="button" class="lf-btn-sm lf-btn-resolve" id="attSyncKeyApplyBtn" style="min-height:34px;padding:5px 12px;">☁️ Sync ID</button>
+  </div>
 
   <form id="attForm" class="att-form">
     <div class="att-field">
@@ -3572,7 +3627,7 @@ service cloud.firestore {
   </form>
 
   <p id="attMessage" class="att-message" aria-live="polite">
-    Attendance records are stored on this device.
+    ☁️ Attendance records are saved on this device and synced live to Firebase Cloud.
   </p>
 
   <div class="att-summary">
@@ -3720,7 +3775,8 @@ service cloud.firestore {
     ];
 
     /* ---- State & Helpers ---- */
-    const $ = id => document.getElementById(id);
+    window.$ = window.getEl = window.getById = id => document.getElementById(id);
+    const $ = window.$, getEl = window.$, getById = window.$;
     const esc = s => String(s)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
@@ -3969,7 +4025,10 @@ service cloud.firestore {
       const rawDay = sun ? [] : cur().d[di];
       const day = rawDay.filter(e => matchesGroup(e.t, grp));
 
-      $('clk').textContent = n.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const timeStr = n.toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      if ($('clk')) $('clk').textContent = timeStr;
+      if ($('heroLiveClock')) $('heroLiveClock').textContent = `🕒 ${timeStr}`;
+      if ($('liveGroupBadge')) $('liveGroupBadge').textContent = grp === 'all' ? '• SHOWING G1 & G2' : `• GROUP ${grp}`;
 
       const act = day.filter(e => m >= e.s && m < e.e);
       const nx = day.filter(e => e.s > m).sort((x, y) => x.s - y.s);
@@ -4017,6 +4076,7 @@ service cloud.firestore {
         $('nxtS').textContent = sun ? 'Classes resume Monday at 10:00 AM' : "You're all done for today!";
         $('nxtCd').hidden = true;
       }
+      if (typeof window.syncOverview === 'function') window.syncOverview();
     }
 
     /* ---- Notifications ---- */
@@ -4188,7 +4248,7 @@ service cloud.firestore {
     if ('caches' in window) {
       caches.keys().then(keys => {
         keys.forEach(k => {
-          if (k.startsWith('lnjpit-connect-') && k !== 'lnjpit-connect-v10') {
+          if (k.startsWith('lnjpit-connect-') && k !== 'lnjpit-connect-v13') {
             caches.delete(k).catch(() => {});
           }
         });
@@ -4198,10 +4258,10 @@ service cloud.firestore {
       if (location.hostname === '127.0.0.1' || location.hostname === 'localhost') {
         // On VS Code Live Server, unregister old caching SWs so code edits show up immediately
         navigator.serviceWorker.getRegistrations().then(regs => {
-          regs.forEach(r => r.update().catch(() => {}));
+          regs.forEach(r => r.unregister().catch(() => {}));
         }).catch(() => {});
       } else if (location.protocol === 'https:') {
-        navigator.serviceWorker.register('./sw.js?v=10').then(reg => {
+        navigator.serviceWorker.register('./sw.js?v=13').then(reg => {
           try { reg.update(); } catch (e) {}
         }).catch(() => { });
       }
@@ -4572,6 +4632,9 @@ service cloud.firestore {
     const saveLostFoundItemFn = httpsCallable(functions, "saveLostFoundItem");
     const deleteLostFoundItemFn = httpsCallable(functions, "deleteLostFoundItem");
     const listLostFoundItemsFn = httpsCallable(functions, "listLostFoundItems");
+    const saveAttendanceRecordFn = httpsCallable(functions, "saveAttendanceRecord");
+    const deleteAttendanceRecordFn = httpsCallable(functions, "deleteAttendanceRecord");
+    const listAttendanceRecordsFn = httpsCallable(functions, "listAttendanceRecords");
 
     const RELAY_COMM_TOPIC = "lnjpit_chapra_comm_sync_v4";
     const RELAY_LF_TOPIC = "lnjpit_chapra_lf_sync_v4";
@@ -4613,6 +4676,10 @@ service cloud.firestore {
           dispatchEvent(new CustomEvent("lf-remote-sync", { detail: { items: [msg.item] } }));
         } else if (msg.type === "lf-delete" && msg.id) {
           dispatchEvent(new CustomEvent("lf-remote-delete", { detail: { id: msg.id } }));
+        } else if (msg.type === "att-upsert" && msg.record) {
+          dispatchEvent(new CustomEvent("att-remote-sync", { detail: { records: [msg.record], studentKey: msg.studentKey } }));
+        } else if (msg.type === "att-delete" && msg.id) {
+          dispatchEvent(new CustomEvent("att-remote-delete", { detail: { id: msg.id, studentKey: msg.studentKey } }));
         }
       };
     }
@@ -4622,14 +4689,14 @@ service cloud.firestore {
         ? "● Firebase Cloud Live"
         : (rtdbOk ? "● Firebase RTDB Live" : "● Cloud Sync Active (All Phones)");
 
-      ["lfSyncStatus", "commSyncStatus"].forEach(id => {
+      ["lfSyncStatus", "commSyncStatus", "attSyncStatus"].forEach(id => {
         const el = $(id);
         if (!el) return;
         el.textContent = label;
         el.classList.remove("is-local");
       });
 
-      ["lfFirebaseBanner", "commFirebaseBanner"].forEach(id => {
+      ["lfFirebaseBanner", "commFirebaseBanner", "attFirebaseBanner"].forEach(id => {
         const banner = $(id);
         if (banner && !banner.dataset.userOpened) banner.hidden = true;
       });
@@ -4648,9 +4715,9 @@ service cloud.firestore {
     }
 
     // Allow tapping the status pill to toggle the Firebase setup & diagnostics drawer
-    ["lfSyncStatus", "commSyncStatus"].forEach(id => {
+    ["lfSyncStatus", "commSyncStatus", "attSyncStatus"].forEach(id => {
       $(id)?.addEventListener("click", () => {
-        const bannerId = id === "lfSyncStatus" ? "lfFirebaseBanner" : "commFirebaseBanner";
+        const bannerId = id === "lfSyncStatus" ? "lfFirebaseBanner" : (id === "attSyncStatus" ? "attFirebaseBanner" : "commFirebaseBanner");
         const banner = $(bannerId);
         if (banner) {
           banner.hidden = !banner.hidden;
@@ -5128,6 +5195,287 @@ service cloud.firestore {
       return false;
     }
 
+
+    // ============================================================================
+    // ATTENDANCE FIREBASE CLOUD SYNC (Firestore + RTDB + Instant Cloud Relay)
+    // ============================================================================
+    function normalizeStudentKey(raw) {
+      const cleaned = String(raw || "").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").replace(/^_+|_+$/g, "");
+      if (cleaned && cleaned !== "lnjpit_student" && cleaned !== "student") {
+        return cleaned.slice(0, 48);
+      }
+      return "";
+    }
+
+    function getActiveAttendanceStudentKey() {
+      try {
+        const explicitKey = normalizeStudentKey(localStorage.getItem("lnjpit_att_sync_key_v1"));
+        if (explicitKey) return explicitKey;
+        const profName = normalizeStudentKey(localStorage.getItem("lnjpit_student_name"));
+        if (profName) return profName;
+      } catch (e) {}
+      return normalizeStudentKey(getFallbackDeviceId()) || "abhi";
+    }
+
+    function getAttendanceRelayTopic(studentKey) {
+      return `lnjpit_chapra_att_sync_v4_${studentKey || getActiveAttendanceStudentKey()}`;
+    }
+
+    async function pushAttendanceRecordToCloud(record, allRecords = null) {
+      if (!record || !record.id) return false;
+      const studentKey = normalizeStudentKey(record.studentKey) || getActiveAttendanceStudentKey();
+      const studentName = String(record.studentName || localStorage.getItem("lnjpit_student_name") || studentKey).trim();
+      const docId = `${studentKey}__${String(record.id).replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+
+      const cleanRecord = {
+        id: String(record.id),
+        docId,
+        studentKey,
+        studentName,
+        date: String(record.date || ""),
+        subject: String(record.subject || "").trim(),
+        slot: String(record.slot || ""),
+        status: ["Present", "Absent", "Cancelled"].includes(record.status) ? record.status : "Present",
+        createdAtMs: Number(record.createdAtMs || Date.now()),
+        updatedAtMs: Number(record.updatedAtMs || Date.now())
+      };
+
+      if (localTabChannel) {
+        try { localTabChannel.postMessage({ type: "att-upsert", record: cleanRecord, studentKey }); } catch (e) {}
+      }
+
+      const [relaySuccess, rtdbSuccess, firestoreSuccess] = await Promise.all([
+        publishToCloudRelay(getAttendanceRelayTopic(studentKey), { op: "upsert", studentKey, record: cleanRecord }),
+        putToRtdb(`attendanceRecords/${studentKey}`, cleanRecord.id, cleanRecord),
+        (async () => {
+          await ensureAnonymousUser().catch(() => {});
+          try {
+            await setDoc(doc(db, "attendanceRecords", docId), {
+              ...cleanRecord,
+              updatedAt: serverTimestamp()
+            }, { merge: true });
+
+            if (Array.isArray(allRecords)) {
+              await setDoc(doc(db, "studentAttendanceProfiles", studentKey), {
+                studentKey,
+                studentName,
+                records: allRecords.map(r => ({
+                  id: String(r.id),
+                  date: String(r.date || ""),
+                  subject: String(r.subject || ""),
+                  slot: String(r.slot || ""),
+                  status: r.status || "Present",
+                  updatedAtMs: Number(r.updatedAtMs || Date.now())
+                })),
+                updatedAtMs: Date.now(),
+                updatedAt: serverTimestamp()
+              }, { merge: true });
+            }
+            setFirebaseSyncUI(true, "", "firestore");
+            return true;
+          } catch (firestoreErr) {
+            try {
+              await saveAttendanceRecordFn({ record: cleanRecord, studentKey });
+              setFirebaseSyncUI(true, "", "firestore");
+              return true;
+            } catch (fnErr) {
+              setFirebaseSyncUI(false, firestoreErr?.code || "permission-denied", "firestore");
+              return false;
+            }
+          }
+        })()
+      ]);
+
+      if (relaySuccess || rtdbSuccess || firestoreSuccess) {
+        dispatchEvent(new CustomEvent("att-record-cloud-confirmed", { detail: { id: cleanRecord.id, studentKey } }));
+        return true;
+      }
+      return false;
+    }
+
+    async function deleteAttendanceRecordFromCloud(id, studentKeyArg = "", remainingRecords = null) {
+      if (!id) return false;
+      const studentKey = normalizeStudentKey(studentKeyArg) || getActiveAttendanceStudentKey();
+      const docId = `${studentKey}__${String(id).replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+
+      if (localTabChannel) {
+        try { localTabChannel.postMessage({ type: "att-delete", id, studentKey }); } catch (e) {}
+      }
+
+      await Promise.all([
+        publishToCloudRelay(getAttendanceRelayTopic(studentKey), { op: "delete", studentKey, id }),
+        deleteFromRtdb(`attendanceRecords/${studentKey}`, id),
+        (async () => {
+          await ensureAnonymousUser().catch(() => {});
+          try {
+            await deleteDoc(doc(db, "attendanceRecords", docId));
+            if (Array.isArray(remainingRecords)) {
+              await setDoc(doc(db, "studentAttendanceProfiles", studentKey), {
+                studentKey,
+                records: remainingRecords.map(r => ({
+                  id: String(r.id),
+                  date: String(r.date || ""),
+                  subject: String(r.subject || ""),
+                  slot: String(r.slot || ""),
+                  status: r.status || "Present",
+                  updatedAtMs: Number(r.updatedAtMs || Date.now())
+                })),
+                updatedAtMs: Date.now(),
+                updatedAt: serverTimestamp()
+              }, { merge: true });
+            }
+          } catch (err) {
+            try { await deleteAttendanceRecordFn({ id, docId, studentKey }); } catch (fnErr) {}
+          }
+        })()
+      ]);
+      return true;
+    }
+
+    async function pollAttendanceCloudHistory(studentKeyArg = "") {
+      const studentKey = normalizeStudentKey(studentKeyArg) || getActiveAttendanceStudentKey();
+      // 1. Poll Instant Cloud Relay for this studentKey
+      try {
+        const res = await fetch(`https://ntfy.sh/${getAttendanceRelayTopic(studentKey)}/json?poll=1&since=all`, { cache: "no-store" });
+        if (res.ok) {
+          setFirebaseSyncUI(true, "", "relay");
+          const text = await res.text();
+          const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+          const attMap = new Map();
+          const deletedIds = new Set();
+
+          for (const line of lines) {
+            try {
+              const evt = JSON.parse(line);
+              if (evt.event !== "message" || !evt.message) continue;
+              const data = JSON.parse(evt.message);
+              if (data.op === "delete" && data.id) {
+                attMap.delete(data.id);
+                deletedIds.add(data.id);
+              } else if (data.op === "upsert" && data.record && data.record.id) {
+                deletedIds.delete(data.record.id);
+                attMap.set(data.record.id, { ...data.record, syncedToCloud: true });
+              }
+            } catch (lineErr) {}
+          }
+
+          deletedIds.forEach(id => {
+            dispatchEvent(new CustomEvent("att-remote-delete", { detail: { id, studentKey } }));
+          });
+          if (attMap.size > 0) {
+            dispatchEvent(new CustomEvent("att-remote-sync", {
+              detail: { records: Array.from(attMap.values()), studentKey }
+            }));
+          }
+        }
+      } catch (e) {}
+
+      // 2. Poll Firebase RTDB for this studentKey
+      const rtdbAtt = await fetchFromRtdb(`attendanceRecords/${studentKey}`);
+      if (Array.isArray(rtdbAtt) && rtdbAtt.length > 0) {
+        dispatchEvent(new CustomEvent("att-remote-sync", {
+          detail: { records: rtdbAtt.map(r => ({ ...r, syncedToCloud: true })), studentKey }
+        }));
+      }
+    }
+
+    let attEventSource = null;
+    let attProfileUnsubscribe = null;
+    let attCollectionUnsubscribe = null;
+
+    function startAttendanceRealtimeListeners(studentKeyArg = "") {
+      const studentKey = normalizeStudentKey(studentKeyArg) || getActiveAttendanceStudentKey();
+
+      // 1. SSE Live Stream for Instant Cloud Relay
+      if (typeof EventSource !== "undefined") {
+        try {
+          if (attEventSource) attEventSource.close();
+          attEventSource = new EventSource(`${RELAY_BASE_URL}/${getAttendanceRelayTopic(studentKey)}/sse`);
+          attEventSource.onopen = () => setFirebaseSyncUI(true, "", "relay");
+          attEventSource.onmessage = event => {
+            try {
+              const pkt = JSON.parse(event.data);
+              if (pkt.event !== "message" || !pkt.message) return;
+              const data = JSON.parse(pkt.message);
+              if (data.op === "delete" && data.id) {
+                dispatchEvent(new CustomEvent("att-remote-delete", { detail: { id: data.id, studentKey } }));
+              } else if (data.op === "upsert" && data.record && data.record.id) {
+                dispatchEvent(new CustomEvent("att-remote-sync", {
+                  detail: { records: [{ ...data.record, syncedToCloud: true }], studentKey }
+                }));
+              }
+            } catch (e) {}
+          };
+        } catch (e) {}
+      }
+
+      // 2. Firestore Student Profile Document Listener (studentAttendanceProfiles/{studentKey})
+      if (attProfileUnsubscribe) {
+        try { attProfileUnsubscribe(); } catch (e) {}
+        attProfileUnsubscribe = null;
+      }
+      try {
+        attProfileUnsubscribe = onSnapshot(doc(db, "studentAttendanceProfiles", studentKey), docSnap => {
+          if (!docSnap.exists()) return;
+          const d = docSnap.data() || {};
+          setFirebaseSyncUI(true, "", "firestore");
+          if (Array.isArray(d.records) && d.records.length > 0) {
+            dispatchEvent(new CustomEvent("att-remote-sync", {
+              detail: {
+                records: d.records.map(r => ({ ...r, studentKey, syncedToCloud: true })),
+                studentKey
+              }
+            }));
+          }
+        }, () => {});
+      } catch (e) {}
+
+      // 3. Firestore attendanceRecords Collection Listener
+      if (attCollectionUnsubscribe) {
+        try { attCollectionUnsubscribe(); } catch (e) {}
+        attCollectionUnsubscribe = null;
+      }
+      try {
+        const attQuery = query(collection(db, "attendanceRecords"), limit(250));
+        attCollectionUnsubscribe = onSnapshot(attQuery, snapshot => {
+          const matching = [];
+          snapshot.forEach(docSnap => {
+            const d = docSnap.data() || {};
+            const rKey = normalizeStudentKey(d.studentKey || docSnap.id.split("__")[0]);
+            if (rKey === studentKey && d.id) {
+              matching.push({
+                id: String(d.id),
+                studentKey: rKey,
+                studentName: d.studentName || studentKey,
+                date: d.date || "",
+                subject: d.subject || "",
+                slot: d.slot || "",
+                status: d.status || "Present",
+                updatedAtMs: Number(d.updatedAtMs || d.createdAtMs || Date.now()),
+                syncedToCloud: true
+              });
+            }
+          });
+          setFirebaseSyncUI(true, "", "firestore");
+          if (matching.length > 0) {
+            dispatchEvent(new CustomEvent("att-remote-sync", {
+              detail: { records: matching, studentKey }
+            }));
+          }
+        }, async () => {
+          try {
+            const res = await listAttendanceRecordsFn({ studentKey });
+            if (Array.isArray(res?.data?.records) && res.data.records.length > 0) {
+              setFirebaseSyncUI(true, "", "firestore");
+              dispatchEvent(new CustomEvent("att-remote-sync", {
+                detail: { records: res.data.records.map(r => ({ ...r, syncedToCloud: true })), studentKey }
+              }));
+            }
+          } catch (fnErr) {}
+        });
+      } catch (e) {}
+    }
+
     // Auto-upload any unsynced or modified user posts/replies from this phone to Cloud
     async function syncPendingLocalDataToFirebase() {
       try {
@@ -5151,6 +5499,19 @@ service cloud.firestore {
             const isSample = String(item?.id || "").startsWith("lf_sample_");
             if (item && item.id && (item.dirtyLocal || (!isSample && !item.syncedToCloud))) {
               await pushLfItemToCloud(item);
+            }
+          }
+        }
+      } catch (e) {}
+
+      try {
+        const rawAtt = localStorage.getItem("lnjpit_attendance_v1");
+        const localAtt = rawAtt ? JSON.parse(rawAtt) : [];
+        const studentKey = getActiveAttendanceStudentKey();
+        if (Array.isArray(localAtt) && localAtt.length > 0) {
+          for (const rec of localAtt) {
+            if (rec && rec.id && (rec.dirtyLocal || !rec.syncedToCloud)) {
+              await pushAttendanceRecordToCloud({ ...rec, studentKey }, localAtt);
             }
           }
         }
@@ -5287,11 +5648,13 @@ service cloud.firestore {
 
     // Boot all 3 sync layers immediately on startup
     startRelayLiveStreams();
-    void pollCloudRelayHistory().then(() => syncPendingLocalDataToFirebase());
+    startAttendanceRealtimeListeners();
+    void Promise.all([pollCloudRelayHistory(), pollAttendanceCloudHistory()]).then(() => syncPendingLocalDataToFirebase());
 
     ensureAnonymousUser().catch(() => {}).finally(() => {
       startLfRealtimeListener();
       startCommRealtimeListener();
+      startAttendanceRealtimeListeners();
     });
 
     // Periodic background sync every 8 seconds + when phone tab regains focus
@@ -5356,15 +5719,33 @@ service cloud.firestore {
       ]);
     });
 
+    addEventListener("att-save-record", async event => {
+      const { record, allRecords } = event.detail || {};
+      if (record) await pushAttendanceRecordToCloud(record, allRecords);
+    });
+
+    addEventListener("att-delete-record", async event => {
+      const { id, studentKey, allRecords } = event.detail || {};
+      if (id) await deleteAttendanceRecordFromCloud(id, studentKey, allRecords);
+    });
+
+    addEventListener("att-sync-key-changed", async event => {
+      const studentKey = event.detail?.studentKey || getActiveAttendanceStudentKey();
+      startAttendanceRealtimeListeners(studentKey);
+      await pollAttendanceCloudHistory(studentKey);
+      await syncPendingLocalDataToFirebase();
+    });
+
     // Manual "Sync Now" button handler
     document.querySelectorAll("[data-fb-sync-now]").forEach(btn => {
       btn.addEventListener("click", async () => {
         const orig = btn.textContent;
         btn.textContent = "⏳ Syncing...";
         await syncPendingLocalDataToFirebase();
-        await pollCloudRelayHistory();
+        await Promise.all([pollCloudRelayHistory(), pollAttendanceCloudHistory()]);
         startLfRealtimeListener();
         startCommRealtimeListener();
+        startAttendanceRealtimeListeners();
         setTimeout(() => { btn.textContent = orig; }, 900);
         if (typeof toast === "function") {
           toast("☁️ Live Sync Complete", "All messages & replies are synced across phones!");
@@ -5393,7 +5774,7 @@ service cloud.firestore {
       crimson: "#dc2626"
     };
 
-    accentSel.addEventListener("change", function () {
+    accentSel?.addEventListener("change", function () {
       const selectedColor = themes[this.value];
 
       if (selectedColor) {
@@ -5406,287 +5787,411 @@ service cloud.firestore {
   </script>
 
 <script>
-
+  // Attendance Tracker Controller (Local Storage + Live Firebase Cloud Sync)
   (() => {
-  "use strict";
+    "use strict";
 
-  const STORAGE_KEY = "lnjpit_attendance_v1";
-  const TARGET = 75;
+    const STORAGE_KEY = "lnjpit_attendance_v1";
+    const DELETED_KEY = "lnjpit_attendance_deleted_v1";
+    const SYNC_ID_KEY = "lnjpit_att_sync_key_v1";
 
-  const $ = id => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
-  const form = $("attForm");
-  if (!form) return;
+    const form = $("attForm");
+    if (!form) return;
 
-  const dateInput = $("attDate");
-  const subjectInput = $("attSubject");
-  const slotInput = $("attSlot");
-  const statusInput = $("attStatus");
-  const message = $("attMessage");
+    const dateInput = $("attDate");
+    const subjectInput = $("attSubject");
+    const slotInput = $("attSlot");
+    const statusInput = $("attStatus");
+    const message = $("attMessage");
+    const syncIdInput = $("attStudentSyncInput");
+    const syncIdBtn = $("attSyncKeyApplyBtn");
 
-  let records = [];
+    let records = [];
+    let deletedIds = new Set();
 
-  // Load records safely from this browser's local storage.
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const parsed = saved ? JSON.parse(saved) : [];
-    records = Array.isArray(parsed) ? parsed : [];
-  } catch (error) {
-    records = [];
-    message.textContent =
-      "Storage access failed. Open this app in a normal browser.";
-  }
-
-  // Default date = today in local time.
-  function localDateString() {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
-
-  dateInput.value = localDateString();
-
-  function saveRecords() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
-      return true;
+      const rawDel = localStorage.getItem(DELETED_KEY);
+      if (rawDel) deletedIds = new Set(JSON.parse(rawDel));
+    } catch (e) {}
+
+    function normalizeKey(raw) {
+      const cleaned = String(raw || "").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").replace(/^_+|_+$/g, "");
+      if (cleaned && cleaned !== "lnjpit_student" && cleaned !== "student") return cleaned.slice(0, 48);
+      return "";
+    }
+
+    function getStudentSyncId() {
+      const fromInput = (syncIdInput?.value || "").trim();
+      if (normalizeKey(fromInput)) return fromInput;
+      try {
+        const savedSyncId = (localStorage.getItem(SYNC_ID_KEY) || "").trim();
+        if (normalizeKey(savedSyncId)) return savedSyncId;
+        const savedName = (localStorage.getItem("lnjpit_student_name") || "").trim();
+        if (normalizeKey(savedName)) return savedName;
+      } catch (e) {}
+      return "Abhi";
+    }
+
+    // Initialize Student Sync ID input
+    const initialSyncLabel = getStudentSyncId();
+    if (syncIdInput) syncIdInput.value = initialSyncLabel;
+    try { localStorage.setItem(SYNC_ID_KEY, initialSyncLabel); } catch (e) {}
+
+    function applyStudentSyncId() {
+      const val = (syncIdInput?.value || "").trim() || getStudentSyncId();
+      if (syncIdInput) syncIdInput.value = val;
+      try {
+        localStorage.setItem(SYNC_ID_KEY, val);
+        localStorage.setItem("lnjpit_student_name", val);
+      } catch (e) {}
+      const profileNameEl = $("profileStudentName");
+      if (profileNameEl) profileNameEl.textContent = val;
+      const homeWelcomeEl = $("homeWelcomeName");
+      if (homeWelcomeEl) homeWelcomeEl.textContent = `${val} 👋`;
+
+      const studentKey = normalizeKey(val) || "abhi";
+      dispatchEvent(new CustomEvent("att-sync-key-changed", { detail: { studentKey, studentName: val } }));
+      message.textContent = `☁️ Syncing Firebase Cloud attendance for "${val}"...`;
+      if (typeof toast === "function") {
+        toast("☁️ Attendance Cloud Sync", `Connected to Firebase Cloud for ${val}.`);
+      }
+    }
+
+    syncIdBtn?.addEventListener("click", applyStudentSyncId);
+    syncIdInput?.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        applyStudentSyncId();
+      }
+    });
+
+    // Load records safely from this browser's local storage.
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const parsed = saved ? JSON.parse(saved) : [];
+      records = Array.isArray(parsed) ? parsed.filter(r => r && r.id && !deletedIds.has(r.id)) : [];
     } catch (error) {
-      message.textContent =
-        "Save nahi ho paya. Browser storage full ya blocked ho sakta hai.";
-      return false;
+      records = [];
+      message.textContent = "Storage access failed. Open this app in a normal browser.";
     }
-  }
 
-  function escapeHTML(value) {
-    return String(value).replace(/[&<>"']/g, char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[char]);
-  }
+    // Default date = today in local time.
+    function localDateString() {
+      const d = new Date();
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
 
-  function counts(list) {
-    return {
-      present: list.filter(r => r.status === "Present").length,
-      absent: list.filter(r => r.status === "Absent").length,
-      cancelled: list.filter(r => r.status === "Cancelled").length
-    };
-  }
+    dateInput.value = localDateString();
 
-  // Cancelled classes are excluded from the percentage.
-  function percentage(list) {
-    const c = counts(list);
-    const held = c.present + c.absent;
-    return held ? (c.present / held) * 100 : null;
-  }
+    function saveRecords() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+        return true;
+      } catch (error) {
+        message.textContent = "Save nahi ho paya. Browser storage full ya blocked ho sakta hai.";
+        return false;
+      }
+    }
 
- function goalText(list) {
-  const present = list.filter(
-    r => r.status === "Present"
-  ).length;
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
 
-  const absent = list.filter(
-    r => r.status === "Absent"
-  ).length;
+    function counts(list) {
+      return {
+        present: list.filter(r => r.status === "Present").length,
+        absent: list.filter(r => r.status === "Absent").length,
+        cancelled: list.filter(r => r.status === "Cancelled").length
+      };
+    }
 
-  const total = present + absent;
-
-  if (total === 0) {
-    return "No classes yet";
-  }
-
-  const pct = (present / total) * 100;
-
-  if (pct >= 75) {
-    return "75% target achieved";
-  }
-
-  // Additional consecutive classes needed,
-  // assuming every future class is attended.
-  const needed = Math.ceil(
-    (0.75 * total - present) / 0.25
-  );
-
-  return `Attend next ${needed} classes`;
-}
-
-  function setPercentage(elementId, value) {
-    $(elementId).textContent =
-      value === null ? "—" : `${value.toFixed(1)}%`;
-  }
-
-  function renderSummary() {
-    const pct = percentage(records);
-    setPercentage("attOverall", pct);
-
-    $("attOverallBar").style.width =
-      `${pct === null ? 0 : Math.min(100, pct)}%`;
-
-    $("attGoal").textContent = goalText(records);
-
-    const c = counts(records);
-    $("attGoalDetail").textContent =
-      `${c.present} present · ${c.absent} absent · ${c.cancelled} cancelled`;
-  }
-
-  function renderSubjects() {
-    const subjects = [...new Set(records.map(r => r.subject))]
-      .sort((a, b) => a.localeCompare(b));
-
-    $("attSubjectRows").innerHTML = subjects.map(subject => {
-      const list = records.filter(r => r.subject === subject);
+    // Cancelled classes are excluded from the percentage.
+    function percentage(list) {
       const c = counts(list);
-      const pct = percentage(list);
-
-      return `
-        <tr>
-          <td>${escapeHTML(subject)}</td>
-          <td>${c.present}</td>
-          <td>${c.absent}</td>
-          <td>${c.cancelled}</td>
-          <td>${pct === null ? "—" : pct.toFixed(1) + "%"}</td>
-          <td>${escapeHTML(goalText(list))}</td>
-        </tr>
-      `;
-    }).join("");
-
-    if (!subjects.length) {
-      $("attSubjectRows").innerHTML =
-        '<tr><td colspan="6">Abhi koi attendance record nahi hai.</td></tr>';
+      const held = c.present + c.absent;
+      return held ? (c.present / held) * 100 : null;
     }
-  }
 
-  function renderHistory() {
-    const filter = $("attFilterDate").value;
+    function goalText(list) {
+      const present = list.filter(r => r.status === "Present").length;
+      const absent = list.filter(r => r.status === "Absent").length;
+      const total = present + absent;
 
-    const list = records
-      .filter(r => !filter || r.date === filter)
-      .sort((a, b) =>
-        b.date.localeCompare(a.date) ||
-        a.slot.localeCompare(b.slot) ||
-        a.subject.localeCompare(b.subject)
+      if (total === 0) return "No classes yet";
+      const pct = (present / total) * 100;
+      if (pct >= 75) return "75% target achieved";
+
+      const needed = Math.ceil((0.75 * total - present) / 0.25);
+      return `Attend next ${needed} classes`;
+    }
+
+    function setPercentage(elementId, value) {
+      $(elementId).textContent = value === null ? "—" : `${value.toFixed(1)}%`;
+    }
+
+    function renderSummary() {
+      const pct = percentage(records);
+      setPercentage("attOverall", pct);
+
+      $("attOverallBar").style.width = `${pct === null ? 0 : Math.min(100, pct)}%`;
+      $("attGoal").textContent = goalText(records);
+
+      const c = counts(records);
+      $("attGoalDetail").textContent = `${c.present} present · ${c.absent} absent · ${c.cancelled} cancelled`;
+      if (typeof window.syncOverview === "function") window.syncOverview();
+    }
+
+    function renderSubjects() {
+      const subjects = [...new Set(records.map(r => r.subject))].sort((a, b) => a.localeCompare(b));
+
+      $("attSubjectRows").innerHTML = subjects.map(subject => {
+        const list = records.filter(r => r.subject === subject);
+        const c = counts(list);
+        const pct = percentage(list);
+
+        return `
+          <tr>
+            <td>${escapeHTML(subject)}</td>
+            <td>${c.present}</td>
+            <td>${c.absent}</td>
+            <td>${c.cancelled}</td>
+            <td>${pct === null ? "—" : pct.toFixed(1) + "%"}</td>
+            <td>${escapeHTML(goalText(list))}</td>
+          </tr>
+        `;
+      }).join("");
+
+      if (!subjects.length) {
+        $("attSubjectRows").innerHTML = '<tr><td colspan="6">Abhi koi attendance record nahi hai.</td></tr>';
+      }
+    }
+
+    function renderHistory() {
+      const filter = $("attFilterDate").value;
+
+      const list = records
+        .filter(r => !filter || r.date === filter)
+        .sort((a, b) =>
+          String(b.date || "").localeCompare(String(a.date || "")) ||
+          String(a.slot || "").localeCompare(String(b.slot || "")) ||
+          String(a.subject || "").localeCompare(String(b.subject || ""))
+        );
+
+      $("attHistoryRows").innerHTML = list.map(r => {
+        const statusClass = {
+          Present: "att-present",
+          Absent: "att-absent",
+          Cancelled: "att-cancelled"
+        }[r.status] || "att-cancelled";
+        const cloudBadge = r.syncedToCloud ? ' <span title="Saved on Firebase Cloud" style="font-size:0.72rem;opacity:0.9;">☁️</span>' : ' <span title="Syncing to Cloud..." style="font-size:0.7rem;opacity:0.7;">⏳</span>';
+
+        return `
+          <tr>
+            <td>${escapeHTML(r.date)}</td>
+            <td>${escapeHTML(r.subject)}</td>
+            <td>${escapeHTML(r.slot)}</td>
+            <td><span class="att-status ${statusClass}">${escapeHTML(r.status)}${cloudBadge}</span></td>
+            <td>
+              <button class="att-delete" type="button" data-delete="${escapeHTML(r.id)}">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      if (!list.length) {
+        $("attHistoryRows").innerHTML = '<tr><td colspan="5">Is filter ke liye koi record nahi hai.</td></tr>';
+      }
+    }
+
+    function render() {
+      renderSummary();
+      renderSubjects();
+      renderHistory();
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const date = dateInput.value;
+      const subject = subjectInput.value.trim();
+      const slot = slotInput.value;
+      const status = statusInput.value;
+      const studentName = getStudentSyncId();
+      const studentKey = normalizeKey(studentName) || "abhi";
+
+      if (!date || !subject) {
+        message.textContent = "Date aur subject dono select karo.";
+        return;
+      }
+
+      if (!["Present", "Absent", "Cancelled"].includes(status)) {
+        message.textContent = "Valid attendance status select karo.";
+        return;
+      }
+
+      // One record per date + subject + lecture slot.
+      let targetRecord = records.find(r =>
+        r.date === date &&
+        r.subject.toLowerCase() === subject.toLowerCase() &&
+        r.slot === slot
       );
+      const isUpdate = Boolean(targetRecord);
 
-    $("attHistoryRows").innerHTML = list.map(r => {
-      const statusClass = {
-        Present: "att-present",
-        Absent: "att-absent",
-        Cancelled: "att-cancelled"
-      }[r.status] || "att-cancelled";
+      if (targetRecord) {
+        targetRecord.status = status;
+        targetRecord.subject = subject;
+        targetRecord.studentKey = studentKey;
+        targetRecord.studentName = studentName;
+        targetRecord.updatedAtMs = Date.now();
+        targetRecord.syncedToCloud = false;
+        targetRecord.dirtyLocal = true;
+      } else {
+        targetRecord = {
+          id: "att_" + (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2, 8)),
+          studentKey,
+          studentName,
+          date,
+          subject,
+          slot,
+          status,
+          createdAtMs: Date.now(),
+          updatedAtMs: Date.now(),
+          syncedToCloud: false,
+          dirtyLocal: true
+        };
+        records.push(targetRecord);
+      }
 
-      return `
-        <tr>
-          <td>${escapeHTML(r.date)}</td>
-          <td>${escapeHTML(r.subject)}</td>
-          <td>${escapeHTML(r.slot)}</td>
-          <td><span class="att-status ${statusClass}">
-            ${escapeHTML(r.status)}
-          </span></td>
-          <td>
-            <button class="att-delete" type="button"
-              data-delete="${escapeHTML(r.id)}">
-              Delete
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join("");
+      deletedIds.delete(targetRecord.id);
+      if (!saveRecords()) return;
 
-    if (!list.length) {
-      $("attHistoryRows").innerHTML =
-        '<tr><td colspan="5">Is filter ke liye koi record nahi hai.</td></tr>';
-    }
-  }
+      render();
+      dispatchEvent(new CustomEvent("att-save-record", {
+        detail: { record: targetRecord, allRecords: records }
+      }));
 
-  function render() {
-    renderSummary();
-    renderSubjects();
-    renderHistory();
-  }
+      message.textContent = isUpdate
+        ? `☁️ Attendance record update ho gaya aur Firebase Cloud par sync ho raha hai (${studentName}).`
+        : `☁️ Attendance save ho gayi aur Firebase Cloud par sync ho rahi hai (${studentName}).`;
 
-  form.addEventListener("submit", event => {
-    event.preventDefault();
+      if (typeof toast === "function") {
+        toast("☁️ Attendance Saved to Cloud", `${subject} (${status}) synced for ${studentName}.`);
+      }
+    });
 
-    const date = dateInput.value;
-    const subject = subjectInput.value.trim();
-    const slot = slotInput.value;
-    const status = statusInput.value;
+    $("attFilterDate").addEventListener("change", renderHistory);
 
-    if (!date || !subject) {
-      message.textContent = "Date aur subject dono select karo.";
-      return;
-    }
+    $("attHistoryRows").addEventListener("click", event => {
+      const button = event.target.closest("[data-delete]");
+      if (!button) return;
 
-    if (!["Present", "Absent", "Cancelled"].includes(status)) {
-      message.textContent = "Valid attendance status select karo.";
-      return;
-    }
+      const id = button.dataset.delete;
 
-    // One record per date + subject + lecture slot.
-    const existing = records.find(r =>
-      r.date === date &&
-      r.subject.toLowerCase() === subject.toLowerCase() &&
-      r.slot === slot
-    );
+      if (button.dataset.confirmDelete !== "1") {
+        button.dataset.confirmDelete = "1";
+        button.textContent = "Confirm?";
+        setTimeout(() => {
+          if (button.isConnected) {
+            delete button.dataset.confirmDelete;
+            button.textContent = "Delete";
+          }
+        }, 3000);
+        return;
+      }
 
-    if (existing) {
-      existing.status = status;
-      existing.subject = subject;
-    } else {
-      records.push({
-        id: (crypto.randomUUID
-          ? crypto.randomUUID()
-          : String(Date.now()) + Math.random().toString(16).slice(2)),
-        date,
-        subject,
-        slot,
-        status
+      deletedIds.add(id);
+      try { localStorage.setItem(DELETED_KEY, JSON.stringify(Array.from(deletedIds))); } catch (e) {}
+      records = records.filter(r => r.id !== id);
+
+      if (saveRecords()) {
+        render();
+        const studentKey = normalizeKey(getStudentSyncId()) || "abhi";
+        dispatchEvent(new CustomEvent("att-delete-record", {
+          detail: { id, studentKey, allRecords: records }
+        }));
+        message.textContent = "☁️ Attendance record device aur Firebase Cloud se delete ho gaya.";
+      }
+    });
+
+    addEventListener("att-record-cloud-confirmed", event => {
+      const id = event.detail?.id;
+      const target = records.find(r => r.id === id);
+      if (target) {
+        target.syncedToCloud = true;
+        target.dirtyLocal = false;
+        saveRecords();
+        renderHistory();
+        message.textContent = `✅ Attendance synced live with Firebase Cloud (${getStudentSyncId()}).`;
+      }
+    });
+
+    addEventListener("att-remote-delete", event => {
+      const id = event.detail?.id;
+      if (!id) return;
+      deletedIds.add(id);
+      try { localStorage.setItem(DELETED_KEY, JSON.stringify(Array.from(deletedIds))); } catch (e) {}
+      const beforeLen = records.length;
+      records = records.filter(r => r.id !== id);
+      if (records.length !== beforeLen) {
+        saveRecords();
+        render();
+      }
+    });
+
+    // Smart conflict-free merge of remote Firebase Cloud attendance records with local records
+    addEventListener("att-remote-sync", event => {
+      const remoteRecords = event.detail?.records;
+      const eventKey = normalizeKey(event.detail?.studentKey);
+      const activeKey = normalizeKey(getStudentSyncId()) || "abhi";
+      if (eventKey && eventKey !== activeKey) return;
+      if (!Array.isArray(remoteRecords)) return;
+
+      const bySlotKey = r => `${r.date}|${String(r.subject || "").trim().toLowerCase()}|${r.slot}`;
+      const map = new Map();
+
+      records.forEach(r => {
+        if (r && r.id && !deletedIds.has(r.id)) {
+          map.set(bySlotKey(r), r);
+        }
       });
-    }
 
-    if (!saveRecords()) return;
+      remoteRecords.forEach(rr => {
+        if (!rr || !rr.id || !rr.date || !rr.subject || deletedIds.has(rr.id)) return;
+        const slotKey = bySlotKey(rr);
+        const existing = map.get(slotKey);
+        if (!existing) {
+          map.set(slotKey, { ...rr, syncedToCloud: true, dirtyLocal: false });
+        } else {
+          const rTime = Number(rr.updatedAtMs || rr.createdAtMs || 0);
+          const lTime = Number(existing.updatedAtMs || existing.createdAtMs || 0);
+          if (rTime >= lTime) {
+            map.set(slotKey, { ...existing, ...rr, syncedToCloud: true, dirtyLocal: false });
+          } else {
+            map.set(slotKey, { ...rr, ...existing });
+          }
+        }
+      });
 
-    message.textContent = existing
-      ? "Attendance record update ho gaya."
-      : "Attendance successfully save ho gayi.";
+      records = Array.from(map.values());
+      saveRecords();
+      render();
+    });
 
     render();
-  });
-
-  $("attFilterDate").addEventListener("change", renderHistory);
-
-  $("attHistoryRows").addEventListener("click", event => {
-    const button = event.target.closest("[data-delete]");
-    if (!button) return;
-
-    const id = button.dataset.delete;
-
-    if (button.dataset.confirmDelete !== "1") {
-      button.dataset.confirmDelete = "1";
-      button.textContent = "Confirm?";
-      setTimeout(() => {
-        if (button.isConnected) {
-          delete button.dataset.confirmDelete;
-          button.textContent = "Delete";
-        }
-      }, 3000);
-      return;
-    }
-
-    records = records.filter(r => r.id !== id);
-
-    if (saveRecords()) {
-      message.textContent = "Attendance record delete ho gaya.";
-      render();
-    }
-  });
-
-  render();
-})();
+  })();
 </script>
 
 <script>
@@ -5906,7 +6411,7 @@ service cloud.firestore {
       if (typeof toast === 'function') toast('🏛️ Default Campus Photo Restored', 'Restored official LNJPIT Chapra campus banner.');
     });
 
-    const syncOverview = () => {
+    const syncOverview = window.syncOverview = () => {
       const next = document.getElementById('nxtT')?.textContent?.trim();
       const nextTime = document.getElementById('nxtS')?.textContent?.trim();
       const now = document.getElementById('nowT')?.textContent?.trim();
